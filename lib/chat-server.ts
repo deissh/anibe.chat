@@ -5,6 +5,8 @@ import socketIo from "socket.io";
 import config from "./config";
 import { Handlers } from "./handlers";
 import { log } from "./logger";
+import { UserManager } from "./userManager";
+import { IUser } from "./interfaces";
 
 export class ChatServer {
   public static readonly PORT: number = config.port;
@@ -50,6 +52,7 @@ export class ChatServer {
         }
 
         log.info("connected user", { socketid: s.id, user: decoded });
+        UserManager.addUser(s, decoded);
         next();
       });
     } else {
@@ -67,12 +70,13 @@ export class ChatServer {
     this.io.on("connect", (socket: socketIo.Socket) => {
       socket.on("disconnect", () => {
         log.info("Client disconnected");
+        UserManager.removeUser(socket);
       });
 
       socket.on("join", Handlers.Join(socket));
       socket.on("leave", Handlers.Leave(socket));
       socket.on("message", Handlers.Message(socket));
-      socket.on("availableUsers", Handlers.GetAvailableUsers(socket));
+      socket.on("online", Handlers.Online(socket));
 
       socket.on("error", (err) => {
         log.error(err);
