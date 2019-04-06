@@ -69,10 +69,10 @@ export class ChatServer {
         log.info("Client disconnected");
       });
 
-      socket.on("join", Handlers.Join);
-      socket.on("leave", Handlers.Leave);
-      socket.on("message", Handlers.Message);
-      socket.on("availableUsers", Handlers.GetAvailableUsers);
+      socket.on("join", Handlers.Join(socket));
+      socket.on("leave", Handlers.Leave(socket));
+      socket.on("message", Handlers.Message(socket));
+      socket.on("availableUsers", Handlers.GetAvailableUsers(socket));
 
       socket.on("error", (err) => {
         log.error(err);
