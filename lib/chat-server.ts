@@ -75,7 +75,7 @@ export class ChatServer {
 
       socket.on("join", Handlers.Join(socket));
       socket.on("leave", Handlers.Leave(socket));
-      socket.on("message", Handlers.Message(socket));
+      socket.on("new_message", Handlers.Message(socket));
       socket.on("online", Handlers.Online(socket));
 
       socket.on("error", (err) => {
