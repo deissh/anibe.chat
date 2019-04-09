@@ -18,7 +18,7 @@ export class ChatApi {
         Authorization: "Bearer " + token,
       },
     });
-    return JSON.parse(res.data);
+    return res.data;
   }
 
   /**
@@ -39,7 +39,7 @@ export class ChatApi {
       },
     });
 
-    return JSON.parse(res.data).rows;
+    return res.data.rows;
   }
 
   /**
@@ -67,7 +67,7 @@ export class ChatApi {
         Authorization: "Bearer " + token,
       },
     });
-    return JSON.parse(res.data);
+    return res.data;
   }
 
   /**
@@ -82,6 +82,6 @@ export class ChatApi {
       },
     });
 
-    return JSON.parse(res.data).rows;
+    return res.data.rows;
   }
 }

@@ -3,6 +3,8 @@ import socketIo = require("socket.io");
 import config from "./config";
 import { log } from "./logger";
 import { UserManager } from "./userManager";
+import { ChatApi } from "./api";
+import { IUser } from "./interfaces";
 
 export class Handlers {
     public static Join(socket: socketIo.Socket) {
@@ -22,7 +24,7 @@ export class Handlers {
     }
 
     public static Message(socket: socketIo.Socket) {
-        return (msg: {
+        return async (msg: {
             chat_id: string,
             body: string,
             attachments: {
@@ -32,19 +34,21 @@ export class Handlers {
               sticker: string,
             },
         }) => {
-            axios.post(config.api + `/messages/${msg.chat_id}`, {
-                body: msg.body,
-                attachments: msg.attachments,
-            }, {
-                headers: {
-                    Authorization: "Bearer " + socket.handshake.query.token,
-                },
-            })
-                .then((res: any) => {
-                    log.info(res.data);
-                    socket.emit("new_message", res.data);
-                })
-                .catch((e) => log.error(e));
+            const token = socket.handshake.query.token;
+            const chatinfo = await ChatApi.get(token, msg.chat_id);
+
+            const res = await ChatApi.createMessage(
+                token,
+                msg,
+            );
+            log.debug(res);
+
+            chatinfo.users.forEach(async (uid: string) => {
+                const data = UserManager.getUserById(uid);
+                // если не нашли пользователя который сейчас активен в чате
+                if (!data) { return; }
+                data.socket.emit("new_message", res);
+            });
         };
     }
 
