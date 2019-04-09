@@ -1,10 +1,10 @@
 import axios from "axios";
 import socketIo = require("socket.io");
+import { ChatApi } from "./api";
 import config from "./config";
+import { IUser } from "./interfaces";
 import { log } from "./logger";
 import { UserManager } from "./userManager";
-import { ChatApi } from "./api";
-import { IUser } from "./interfaces";
 
 export class Handlers {
     public static Join(socket: socketIo.Socket) {

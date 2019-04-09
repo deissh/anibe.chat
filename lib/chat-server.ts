@@ -4,9 +4,9 @@ import jwt from "jsonwebtoken";
 import socketIo from "socket.io";
 import config from "./config";
 import { Handlers } from "./handlers";
+import { IUser } from "./interfaces";
 import { log } from "./logger";
 import { UserManager } from "./userManager";
-import { IUser } from "./interfaces";
 
 export class ChatServer {
   public static readonly PORT: number = config.port;
