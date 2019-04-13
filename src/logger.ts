@@ -1,5 +1,5 @@
-import winston from "winston";
-import config from "./config";
+import winston from 'winston';
+import config from './config';
 
 export const log = winston.createLogger({
   level: config.logLevel,
@@ -10,16 +10,14 @@ export const log = winston.createLogger({
     // - Write all logs error (and below) to `error.log`.
     //
     new winston.transports.File({
-      filename: "error.log",
-      level: "error",
+      filename: 'error.log',
+      level: 'error',
     }),
     new winston.transports.File({
-      filename: "combined.log",
+      filename: 'combined.log',
     }),
     new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.colorize(),
-      ),
+      format: winston.format.combine(winston.format.colorize()),
     }),
   ],
 });

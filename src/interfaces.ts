@@ -96,7 +96,6 @@ export interface INotif {
   updatedAt: string;
 }
 
-
 export interface IChat {
   id: string;
   name: string;

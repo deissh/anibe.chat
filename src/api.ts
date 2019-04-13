@@ -1,6 +1,6 @@
-import axios from "axios";
-import config from "./config";
-import { IChat, IMessage } from "./interfaces";
+import axios from 'axios';
+import config from './config';
+import { IChat, IMessage } from './interfaces';
 
 export class ChatApi {
   /**
@@ -10,12 +10,12 @@ export class ChatApi {
    * @param {string} id uuid чата
    * @returns {Promise<IChat>} результат
    */
-  public static async get(token: string, id: string): Promise < IChat > {
+  public static async get(token: string, id: string): Promise<IChat> {
     const url = config.api + `/chats/${id}`;
 
     const res = await axios.get(url, {
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: 'Bearer ' + token,
       },
     });
     return res.data;
@@ -27,7 +27,7 @@ export class ChatApi {
    * @param {string} query Название чата, может быть null
    * @returns {Promise<IChat[]>}
    */
-  public static async getAll(token: string, query ?: string): Promise < IChat[] > {
+  public static async getAll(token: string, query?: string): Promise<IChat[]> {
     let url = config.api + `/chats`;
     if (query) {
       url += `?q=${query}`;
@@ -35,7 +35,7 @@ export class ChatApi {
 
     const res = await axios.get(url, {
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: 'Bearer ' + token,
       },
     });
 
@@ -51,20 +51,20 @@ export class ChatApi {
   public static async createMessage(
     token: string,
     data: {
-      chat_id: string,
-      body: string,
+      chat_id: string;
+      body: string;
       attachments: {
-        images: string[],
-        links: string[],
-        videos: string[],
-        sticker: string,
-      },
-    },
-  ): Promise < any > {
+        images: string[];
+        links: string[];
+        videos: string[];
+        sticker: string;
+      };
+    }
+  ): Promise<any> {
     const url = config.api + `/messages/${data.chat_id}`;
     const res = await axios.post(url, data, {
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: 'Bearer ' + token,
       },
     });
     return res.data;
@@ -74,11 +74,15 @@ export class ChatApi {
    * Получение сообщений с паджинацией
    * @param {string} id uuid чата
    */
-  public static async getMessages(token: string, id: string, page: number = 1): Promise < IMessage[] > {
+  public static async getMessages(
+    token: string,
+    id: string,
+    page: number = 1
+  ): Promise<IMessage[]> {
     const url = config.api + `/messages/${id}?page=${page}`;
     const res = await axios.get(url, {
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: 'Bearer ' + token,
       },
     });
 
