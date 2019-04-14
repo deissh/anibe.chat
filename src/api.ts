@@ -1,6 +1,6 @@
-import axios from 'axios';
-import config from './config';
-import { IChat, IMessage } from './interfaces';
+import axios from "axios";
+import config from "./config";
+import { IChat, IMessage } from "./interfaces";
 
 export class ChatApi {
   /**
@@ -15,7 +15,7 @@ export class ChatApi {
 
     const res = await axios.get(url, {
       headers: {
-        Authorization: 'Bearer ' + token,
+        Authorization: "Bearer " + token,
       },
     });
     return res.data;
@@ -35,7 +35,7 @@ export class ChatApi {
 
     const res = await axios.get(url, {
       headers: {
-        Authorization: 'Bearer ' + token,
+        Authorization: "Bearer " + token,
       },
     });
 
@@ -59,12 +59,12 @@ export class ChatApi {
         videos: string[];
         sticker: string;
       };
-    }
+    },
   ): Promise<any> {
     const url = config.api + `/messages/${data.chat_id}`;
     const res = await axios.post(url, data, {
       headers: {
-        Authorization: 'Bearer ' + token,
+        Authorization: "Bearer " + token,
       },
     });
     return res.data;
@@ -77,12 +77,12 @@ export class ChatApi {
   public static async getMessages(
     token: string,
     id: string,
-    page: number = 1
+    page: number = 1,
   ): Promise<IMessage[]> {
     const url = config.api + `/messages/${id}?page=${page}`;
     const res = await axios.get(url, {
       headers: {
-        Authorization: 'Bearer ' + token,
+        Authorization: "Bearer " + token,
       },
     });
 

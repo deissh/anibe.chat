@@ -1,4 +1,4 @@
-import { ChatServer } from './chat-server';
+import { ChatServer } from "./chat-server";
 
 const app = new ChatServer().getApp();
 export { app };

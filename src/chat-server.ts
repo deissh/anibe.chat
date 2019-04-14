@@ -1,12 +1,13 @@
-import express from 'express';
-import { createServer, Server } from 'http';
-import jwt from 'jsonwebtoken';
-import socketIo from 'socket.io';
-import config from './config';
-import { Handlers } from './handlers';
-import { IUser } from './interfaces';
-import { log } from './logger';
-import { UserManager } from './userManager';
+import cors from "cors";
+import express from "express";
+import { createServer, Server } from "http";
+import jwt from "jsonwebtoken";
+import socketIo from "socket.io";
+import config from "./config";
+import { Handlers } from "./handlers";
+import { IUser } from "./interfaces";
+import { log } from "./logger";
+import { UserManager } from "./userManager";
 
 export class ChatServer {
   public static readonly PORT: number = config.port;
@@ -29,6 +30,7 @@ export class ChatServer {
 
   private createApp(): void {
     this.app = express();
+    this.app.use(cors());
   }
 
   private createServer(): void {
@@ -51,38 +53,38 @@ export class ChatServer {
         (err: Error, decoded: any) => {
           if (err) {
             log.error(err.message, { socketid: s.id });
-            return next(new Error('Authentication error'));
+            return next(new Error("Authentication error"));
           }
 
-          log.info('connected user', { socketid: s.id, user: decoded });
+          log.info("connected user", { socketid: s.id, user: decoded });
           UserManager.addUser(s, decoded);
           next();
-        }
+        },
       );
     } else {
-      next(new Error('Authentication error'));
+      next(new Error("Authentication error"));
     }
   }
 
   private listen(): void {
     this.server.listen(this.port, () => {
-      log.info('Running server on port ' + this.port);
+      log.info("Running server on port " + this.port);
     });
 
     this.io.use(this.auth);
 
-    this.io.on('connect', (socket: socketIo.Socket) => {
-      socket.on('disconnect', () => {
-        log.info('Client disconnected');
+    this.io.on("connect", (socket: socketIo.Socket) => {
+      socket.on("disconnect", () => {
+        log.info("Client disconnected");
         UserManager.removeUser(socket);
       });
 
-      socket.on('join', Handlers.Join(socket));
-      socket.on('leave', Handlers.Leave(socket));
-      socket.on('new_message', Handlers.Message(socket));
-      socket.on('online', Handlers.Online(socket));
+      socket.on("join", Handlers.Join(socket));
+      socket.on("leave", Handlers.Leave(socket));
+      socket.on("new_message", Handlers.Message(socket));
+      socket.on("online", Handlers.Online(socket));
 
-      socket.on('error', err => {
+      socket.on("error", (err) => {
         log.error(err);
       });
     });

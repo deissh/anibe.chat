@@ -1,10 +1,9 @@
-import axios from 'axios';
-import socketIo = require('socket.io');
-import { ChatApi } from './api';
-import config from './config';
-import { IUser } from './interfaces';
-import { log } from './logger';
-import { UserManager } from './userManager';
+import socketIo = require("socket.io");
+import { ChatApi } from "./api";
+import config from "./config";
+import { IUser } from "./interfaces";
+import { log } from "./logger";
+import { UserManager } from "./userManager";
 
 export class Handlers {
   public static Join(socket: socketIo.Socket) {
@@ -12,14 +11,14 @@ export class Handlers {
       const self = UserManager.getUserBySocket(socket);
       if (self) {
         socket.join(id);
-        socket.to(id).emit('join', { id, user: self.user });
+        socket.to(id).emit("join", { id, user: self.user });
       }
     };
   }
 
   public static Leave(socket: socketIo.Socket) {
     return (id: string, cb: CallableFunction) => {
-      socket.to(id).emit('leave', { id });
+      socket.to(id).emit("leave", { id });
     };
   }
 
@@ -46,7 +45,7 @@ export class Handlers {
         if (!data) {
           return;
         }
-        data.socket.emit('new_message', res);
+        data.socket.emit("new_message", res);
       });
     };
   }
@@ -54,7 +53,7 @@ export class Handlers {
   public static Online(socket: socketIo.Socket) {
     return (arg: any): any => {
       const users = UserManager.getAvailableUsers();
-      socket.emit('online', users.length);
+      socket.emit("online", users.length);
     };
   }
 }

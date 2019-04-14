@@ -12,6 +12,7 @@
     "@types/express": "^4.16.1",
     "@types/socket.io": "^2.1.2",
     "axios": "^0.18.0",
+    "cors": "^2.8.5",
     "dotenv": "^7.0.0",
     "dotenv-safe": "^6.1.0",
     "express": "^4.16.4",
@@ -31,6 +32,7 @@
     "watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.4",
     "@types/dotenv-safe": "^5.0.3",
     "@types/jsonwebtoken": "^8.3.2",
     "@types/lodash": "^4.14.123",
