@@ -30,7 +30,10 @@ export class ChatServer {
 
   private createApp(): void {
     this.app = express();
-    this.app.use(cors());
+    this.app.use(cors({
+      origin: '*:*',
+      credentials: true,
+    }));
   }
 
   private createServer(): void {
@@ -42,7 +45,7 @@ export class ChatServer {
   }
 
   private sockets(): void {
-    this.io = socketIo(this.server, { origins: "*:*" });
+    this.io = socketIo(this.server);
   }
 
   private auth(s: socketIo.Socket, next: (err?: any) => void): void {
