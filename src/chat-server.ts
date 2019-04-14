@@ -42,7 +42,7 @@ export class ChatServer {
   }
 
   private sockets(): void {
-    this.io = socketIo(this.server);
+    this.io = socketIo(this.server, { origins: "*:*" });
   }
 
   private auth(s: socketIo.Socket, next: (err?: any) => void): void {
