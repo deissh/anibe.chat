@@ -29,7 +29,8 @@
     "prebuild": "npm run clean && npm run format && npm run lint && echo Using TypeScript && tsc --version",
     "build": "tsc --pretty",
     "start": "ts-node ./src",
-    "watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts"
+    "watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts",
+    "docs": "typedoc --theme markdown --out ./DOCS ./src"
   },
   "devDependencies": {
     "@types/cors": "^2.8.4",
@@ -43,6 +44,8 @@
     "ts-node": "^8.0.3",
     "tslint": "^5.15.0",
     "tslint-config-prettier": "^1.18.0",
+    "typedoc": "^0.14.2",
+    "typedoc-plugin-markdown": "^1.2.0",
     "typescript": "^3.4.1"
   }
 }
