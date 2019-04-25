@@ -6,8 +6,14 @@ import { log } from "./logger";
 import { UserManager } from "./userManager";
 
 export class Handlers {
-  public static Join(socket: socketIo.Socket) {
-    return (id: string, cb: CallableFunction) => {
+  /**
+   * Обрабатывает подключение новых пользователей
+   * @static
+   * @param {socketIo.Socket} socket Socket пользователя
+   * @returns {(...args: any[]) => void}
+   */
+  public static Join(socket: socketIo.Socket): (...args: any[]) => void {
+    return (id: string, cb: (...args: any[]) => void) => {
       const self = UserManager.getUserBySocket(socket);
       if (self) {
         socket.join(id);
@@ -16,13 +22,25 @@ export class Handlers {
     };
   }
 
-  public static Leave(socket: socketIo.Socket) {
-    return (id: string, cb: CallableFunction) => {
+  /**
+   * Обрабатывает отключение пользователей
+   * @static
+   * @param {socketIo.Socket} socket Socket пользователя
+   * @returns {(...args: any[]) => void}
+   */
+  public static Leave(socket: socketIo.Socket): (...args: any[]) => void {
+    return (id: string, cb: (...args: any[]) => void) => {
       socket.to(id).emit("leave", { id });
     };
   }
 
-  public static Message(socket: socketIo.Socket) {
+  /**
+   * Обрабатывает все отправленые сообщения
+   * @static
+   * @param {socketIo.Socket} socket Socket пользователя
+   * @returns {(...args: any[]) => void}
+   */
+  public static Message(socket: socketIo.Socket): (...args: any[]) => void {
     return async (msg: {
       chat_id: string;
       body: string;
@@ -33,12 +51,16 @@ export class Handlers {
         sticker: string;
       };
     }) => {
+      // получаем токен из пользователя
       const token = socket.handshake.query.token;
+      // проверяем что токен валидный + запрашиваем информацию по чату в который нужно отправить сообщение
       const chatinfo = await ChatApi.get(token, msg.chat_id);
 
+      // отправляем сообщение
       const res = await ChatApi.createMessage(token, msg);
       log.debug(res);
 
+      // информируем каждого пользователя в чате (только тех кто в подключен)
       chatinfo.users.forEach(async (uid: string) => {
         const data = UserManager.getUserById(uid);
         // если не нашли пользователя который сейчас активен в чате
@@ -50,6 +72,12 @@ export class Handlers {
     };
   }
 
+  /**
+   * Обрабатывает запрос на получение кол-во пользователй в сети
+   * @static
+   * @param {socketIo.Socket} socket Socket пользователя
+   * @returns {(...args: any[]) => void}
+   */
   public static Online(socket: socketIo.Socket) {
     return (arg: any): any => {
       const users = UserManager.getAvailableUsers();

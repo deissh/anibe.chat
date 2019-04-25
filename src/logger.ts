@@ -1,6 +1,10 @@
 import winston from "winston";
 import config from "./config";
 
+/**
+ * Создает новый логгер и настраивает его
+ * @returns {winston.Logger}
+ */
 export const log = winston.createLogger({
   level: config.logLevel,
   format: winston.format.json(),

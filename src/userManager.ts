@@ -7,56 +7,62 @@ interface IUserData {
 }
 
 /**
- * @description Contain all active users
+ * @description Содержит всех пользователей и обертку над нимим
  */
 export class UserManager {
   /**
-   * Add new user connection with user info
-   * @param {socketIo.Socket} socket Socket.io object
-   * @param {IUser} user Contain user data from jwt
+   * Добавляет нового пользователя
+   * @static
+   * @param {socketIo.Socket} socket Socket пользователя
+   * @param {IUser} user Содержит информацию о пользователя из JWT токена
    */
   public static addUser(socket: socketIo.Socket, user: IUser) {
     this.users.set(socket.id, { socket, user });
   }
 
   /**
-   * Remove user from avalible
-   * @param {socketIo.Socket} socket Socket.io object
+   * Удаляет пользователя
+   * @static
+   * @param {socketIo.Socket} socket Socket пользователя
+   * @param {IUser} user Содержит информацию о пользователя из JWT токена
    */
   public static removeUser(socket: socketIo.Socket) {
     this.users.delete(socket.id);
   }
 
   /**
-   * Return all avalible users
-   * @returns {IUserData[]} Users connection info
+   * Возвращяет список всех доступных пользователей
+   * @static
+   * @param {IUser} user Содержит информацию о пользователя из JWT токена
+   * @returns {IUserData[]}
    */
   public static getAvailableUsers(): IUserData[] {
     return Array.from(this.users.values());
   }
 
   /**
-   * Return true if user already added
+   * Возвращяет true если пользователь находится в списке на основе его uuid
+   * @static
    * @param {string} userid User uuid
-   * @returns {boolean} Status
+   * @returns {boolean}
    */
   public static isUserAvailable(id: string): boolean {
     return this.getAvailableUsers().some((u: IUserData) => u.user.id === id);
   }
 
   /**
-   * Return user if exist
+   * Возвращяет пользователя если он существует
    * @param {string} id user uuid
-   * @returns {IUserData} User connection info
+   * @returns {IUserData} Информация об подключении пользователя
    */
   public static getUserById(id: string): IUserData | undefined {
     return this.getAvailableUsers().find((u: IUserData) => u.user.id === id);
   }
 
   /**
-   * Return user by her socket id
-   * @param {socketIo.Socket} socket Socket.IO connection
-   * @returns {IUserData} User connection info
+   * Возвращяет пользователя по его Socket id
+   * @param {socketIo.Socket} socket Socket
+   * @returns {IUserData} Информация о подключении пользователя
    */
   public static getUserBySocket(
     socket: socketIo.Socket,
@@ -67,7 +73,8 @@ export class UserManager {
   }
 
   /**
-   * @description contain users objects by their connection id
+   * @description Содержит в себе всех пользователей
+   * @type {Map<string, IUserData> = new Map()}
    */
   private static users: Map<string, IUserData> = new Map();
 }

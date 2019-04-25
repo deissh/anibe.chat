@@ -24,10 +24,20 @@ export class ChatServer {
     this.listen();
   }
 
+  /**
+   * Получение Express приложения (его настроеный экземпляр)
+   * @public
+   * @returns {express.Application}
+   */
   public getApp(): express.Application {
     return this.app;
   }
 
+  /**
+   * Создает приложение и настраивает мидлверес
+   * @private
+   * @returns
+   */
   private createApp(): void {
     this.app = express();
     this.app.use(cors({
@@ -36,18 +46,40 @@ export class ChatServer {
     }));
   }
 
+  /**
+   * Создает сервер Express
+   * @private
+   * @returns
+   */
   private createServer(): void {
     this.server = createServer(this.app);
   }
 
+  /**
+   * Конфигурирует приложение
+   * @private
+   * @returns
+   */
   private config(): void {
     this.port = process.env.PORT || ChatServer.PORT;
   }
 
+  /**
+   * Настройка Socket.IO
+   * @private
+   * @returns
+   */
   private sockets(): void {
     this.io = socketIo(this.server);
   }
 
+  /**
+   * Промежуточный обработчик для проверки и авторизации входящих соединений
+   * @private
+   * @param {socketIo.Socket} s Socket пользователя
+   * @param {(err?: any) => void} next CallBack для передачи управления дальше
+   * @returns
+   */
   private auth(s: socketIo.Socket, next: (err?: any) => void): void {
     if (s.handshake.query && s.handshake.query.token) {
       jwt.verify(
@@ -69,6 +101,11 @@ export class ChatServer {
     }
   }
 
+  /**
+   * Устанавливает прослушивание событий и каналов
+   * @private
+   * @returns
+   */
   private listen(): void {
     this.server.listen(this.port, () => {
       log.info("Running server on port " + this.port);
