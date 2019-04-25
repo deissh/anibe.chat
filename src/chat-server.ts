@@ -31,7 +31,7 @@ export class ChatServer {
   private createApp(): void {
     this.app = express();
     this.app.use(cors({
-      origin: '*:*',
+      origin: "*:*",
       credentials: true,
     }));
   }

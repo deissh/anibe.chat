@@ -1,5 +1,5 @@
-import socketIo from 'socket.io';
-import { IUser } from './interfaces';
+import socketIo from "socket.io";
+import { IUser } from "./interfaces";
 
 interface IUserData {
   socket: socketIo.Socket;
@@ -59,10 +59,10 @@ export class UserManager {
    * @returns {IUserData} User connection info
    */
   public static getUserBySocket(
-    socket: socketIo.Socket
+    socket: socketIo.Socket,
   ): IUserData | undefined {
     return this.getAvailableUsers().find(
-      (u: IUserData) => u.socket.id === socket.id
+      (u: IUserData) => u.socket.id === socket.id,
     );
   }
 
