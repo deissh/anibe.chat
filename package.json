@@ -33,7 +33,7 @@
     "docs": "typedoc --theme markdown --out ./DOCS ./src"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.4",
+    "@types/cors": "^2.8.5",
     "@types/dotenv-safe": "^5.0.3",
     "@types/jsonwebtoken": "^8.3.2",
     "@types/lodash": "^4.14.123",
